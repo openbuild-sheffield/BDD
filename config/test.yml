@@ -1,0 +1,25 @@
+default:
+  formatters:
+    pretty: true
+    progress:
+  autoload:
+    '': %paths.base%/../bootstrap
+  extensions:
+    Behat\MinkExtension:
+      default_session: goutte
+      javascript_session: zombie
+      #selenium2: ~
+      #browser_name: 'chrome'
+      goutte:
+        guzzle_parameters:
+          verify: false
+      zombie:
+        host: '127.0.0.1'
+        port: '8137'
+        node_modules_path: '/usr/local/lib/node_modules/'
+  suites:
+    web_features:
+      paths: [%paths.base%/../features/test]
+      contexts: [ WebContext ]
+      filters:
+        tags: @web
