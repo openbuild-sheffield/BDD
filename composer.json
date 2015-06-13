@@ -5,8 +5,9 @@
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-zombie-driver": "~1.2",
-        "phpspec/phpspec": "~2.0",
-        "bossa/phpspec2-expect": "*"
+        "bossa/phpspec2-expect": "*",
+        "guzzlehttp/guzzle": "*",
+        "phpspec/phpspec": "~2.0"
     },
     "config": {
         "bin-dir": "bin"
