@@ -1,13 +1,13 @@
 {
     "require-dev": {
-        "behat/behat": "3.*@stable",
-        "behat/mink": "1.6.*@stable",
+        "behat/behat": "*",
+        "behat/mink": "*",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
-        "behat/mink-zombie-driver": "~1.2",
+        "behat/mink-zombie-driver": "*",
         "bossa/phpspec2-expect": "*",
         "guzzlehttp/guzzle": "*",
-        "phpspec/phpspec": "~2.0"
+        "phpspec/phpspec": "*"
     },
     "config": {
         "bin-dir": "bin"
@@ -15,7 +15,8 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
-            "": "src"
+            "Openbuild": "src/",
+            "SpecMatcher": "specMatcher/"
         }
     }
 }
