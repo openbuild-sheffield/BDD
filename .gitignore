@@ -1,4 +1,6 @@
 .DS_STORE
+.vagrant/
+ansible/playbook.yml
 bin/
 composer.lock
 vendor
