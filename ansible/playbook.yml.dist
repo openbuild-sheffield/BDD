@@ -1,0 +1,43 @@
+---
+- hosts: all
+  sudo: true
+  vars:
+    document_root: /website
+    log_dir: /logs
+    mysql_root_password: letmein
+    mysql_sock_dir: /tmp
+    mysql_data_dir: /data
+    fqdn: OpenBuild
+    timezone: Europe/London
+    php_composer_path: /usr/local/bin/composer
+    php_composer_keep_updated: true
+    php_composer_add_to_path: true
+    php_composer_add_project_to_path: false
+    #php_composer_project_path: /website/bin
+    # GitHub OAuth token (used to help overcome API rate limits).
+    php_composer_github_oauth_token: ''
+  pre_tasks:
+    - name: Update sources list
+      template:
+        src=templates/sources.list.j2
+        dest=/etc/apt/sources.list
+    - name: Add dotdeb apt-key
+      apt_key:
+        url: "https://www.dotdeb.org/dotdeb.gpg"
+        state: present
+    - name: update apt cache
+      apt: update_cache=yes
+    - name: install vim
+      apt: name=vim state=latest
+    - name: install git
+      apt: name=git state=latest
+    - name: Add www-data user
+      user:
+        name: www-data
+        comment: "Developer"
+        group: www-data
+        shell: /bin/bash
+  roles:
+    - nginx
+    - mysql
+    - php
