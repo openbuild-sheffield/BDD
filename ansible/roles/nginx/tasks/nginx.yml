@@ -1,0 +1,28 @@
+---
+  - name: install nginx
+    apt: name=nginx state=present
+
+  - name: Create ssl directory
+    file: path=/etc/nginx/ssl state=directory
+
+  - name: create self-signed SSL cert
+    command: openssl req -new -nodes -x509 -subj "/C=GB/ST=South Yorkshire/L=Sheffield/O=IT/CN={{fqdn | quote}}" -days 3650 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt -extensions v3_ca creates=/etc/nginx/ssl/server.crt
+    notify:
+      - restart nginx
+
+  - name: Copy across proxy host
+    template:
+      src=proxy
+      dest=/etc/nginx/sites-enabled/proxy
+    notify:
+      - restart nginx
+
+  - name: Copy across new virtual host
+    template:
+      src=default
+      dest=/etc/nginx/sites-enabled/default
+    notify:
+      - restart nginx
+
+  - name: starting nginx
+    service: name=nginx state=started enabled=yes

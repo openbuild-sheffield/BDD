@@ -1,0 +1,29 @@
+server {
+
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name 0.0.0.0;
+        ssl_certificate /etc/nginx/ssl/server.crt;
+        ssl_certificate_key /etc/nginx/ssl/server.key;
+
+        root /website/public;
+
+        index index.html index.htm;
+
+        location / {
+                try_files $uri /index.php$is_args$args;
+        }
+
+        location ~ ^/index\.php(/|$) {
+                fastcgi_pass php-fpm-sock;
+                fastcgi_split_path_info ^(.+\.php)(/.*)$;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param HTTPS on;
+        }
+
+        location ~ \.php$ {
+                return 404;
+        }
+
+}

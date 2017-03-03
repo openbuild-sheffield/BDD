@@ -1,0 +1,29 @@
+server {
+
+    listen 80 ssl;
+    listen [::]:80 ssl;
+    server_name _;
+
+    ssl_certificate /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    #ssl_client_certificate /website/certificates/Combined.crt;
+    #ssl_verify_client optional;
+    #ssl_verify_depth 4;
+
+    location / {
+        proxy_pass  https://0.0.0.0:443;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_set_header Accept-Encoding   "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        #proxy_set_header X-Forwarded-SSL-Client-Verify $ssl_client_verify;
+        #proxy_set_header X-Forwarded-SSL-Client-Fingerprint $ssl_client_fingerprint;
+        #proxy_set_header X-Forwarded-SSL-Client-Cert $ssl_client_cert;
+        add_header Front-End-Https on;
+        proxy_redirect off;
+    }
+
+}
