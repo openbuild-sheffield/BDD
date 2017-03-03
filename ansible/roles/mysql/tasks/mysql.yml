@@ -1,0 +1,42 @@
+---
+
+  - name: install debconf-utils
+    apt: name=debconf-utils state=present
+
+  - name: set mysql root password before installing
+    debconf: name='mysql-server' question='mysql-server/root_password' value='{{mysql_root_password | quote}}' vtype='password'
+    no_log: true
+
+  - name: set mysql root password again before installing
+    debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{mysql_root_password | quote}}' vtype='password'
+    no_log: true
+
+  - name: install mysql
+    apt: name=mysql-server state=latest
+    notify:
+      - reload mysql
+
+  - name: install python-mysqldb
+    apt: name=python-mysqldb state=present
+
+#  - name: copy mysql config
+#    template:
+#      src=my.cnf.j2
+#      dest=/etc/mysql/my.cnf
+#    notify:
+#      - reload mysql
+
+  - name: starting mysql
+    service: name=mysql state=started enabled=yes
+
+  - name: delete anonymous MySQL server user for {{ ansible_hostname }}
+    action: mysql_user user="" host="{{ ansible_hostname }}" state="absent" login_user="root" login_password="{{mysql_root_password | quote}}"
+    no_log: true
+
+  - name: delete anonymous MySQL server user for localhost
+    action: mysql_user user="" state="absent" login_user="root" login_password="{{mysql_root_password | quote}}"
+    no_log: true
+
+  - name: remove the MySQL test database
+    action: mysql_db db=test state=absent login_user="root" login_password="{{mysql_root_password | quote}}"
+    no_log: true
