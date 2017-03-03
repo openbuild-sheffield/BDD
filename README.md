@@ -24,9 +24,9 @@ Run the specs
 
   ```bin/phpspec run```
 
-Add test method
+Add test method to file spec/Openbuild/TestClassSpec.php
 
-  ```#spec/Openbuild/TestClassSpec.php
+  ```
     function it_should_say_hello_name()
     {
         $this->sayHelloName("Danny")->shouldReturn("Hi, Danny");
@@ -35,8 +35,7 @@ Add test method
 
 Run the specs
 
-  ```bin/phpspec run
-  ```
+  ```bin/phpspec run```
 
 Should fail and offer to create class/method, accept the offer and complete the method.  Rince repeat.
 
